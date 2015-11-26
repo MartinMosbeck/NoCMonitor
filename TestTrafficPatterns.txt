@@ -1,0 +1,14 @@
+Random => Random dest
+Permuation
+        Bit Permutation
+                Bit Complement => dest= bit wise complement of src
+                Bit Reverse => dest= bit wise reversal of src
+                Bit Rotation => dest= rotate bitwise src by 1
+                Transpose => a node (i, j) only sends packets to its symmetric
+                                node (n − 1 − j, n − 1 −i), n is the size of 
+                                the mesh.
+                Shuffle =>
+
+
+
+
