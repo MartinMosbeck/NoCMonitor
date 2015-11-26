@@ -134,7 +134,18 @@ begin
 			if (flit_in[flit_port_width-1] == 1) //flit is valid
 			begin
 				$display("PE(0) @%3d: Flit '%0x' received", cnt_cycle, flit_in[63:0]);
-			end			
+			end	
+
+                        //receive a credit
+                        if (credit_in[credit_port_width-1] == 1)
+                        begin
+                                vc = credit_in[credit_port_width-2 : 0];
+                                cnt_credit[vc]=cnt_credit[vc]+1;
+                                $display("PE(0) @%3d: Received credit for vc%0d",cnt_cycle, vc);
+                                $display("PE(0) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
+                                
+                        
+                        end			
 
 			//send a flit
 			if(cnt_cycle%10 == 0)
@@ -146,9 +157,13 @@ begin
 				sendFlit = 1;
 				$display("PE(0) @%3d: Flit '%0x' sent", cnt_cycle, flit_out[63:0]);
                                 data_index = data_index + 1;
+               
+                                cnt_credit[vc] = cnt_credit[vc]-1;
+                                $display("PE(0) @%3d: Consumed credit for vc%0d",cnt_cycle, vc);
+                                $display("PE(0) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
 
 			end
-			//receive a credit		
+				
 		
 		end	
 	end
