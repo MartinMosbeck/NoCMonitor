@@ -1,9 +1,9 @@
-`include "connect_parameters.v"
+`include "connect_parameter.v"
 
 
 module testbench();
 	parameter HalfClkPeriod = 5;
-	localparam ClkPeriod = 2*HalfClkPeriod;
+	parameter ClkPeriod = 2*HalfClkPeriod;
 
 	reg clk;
 	reg rst_n;

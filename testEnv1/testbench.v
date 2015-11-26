@@ -3,13 +3,13 @@
 
 module testbench();
 	parameter HalfClkPeriod = 5;
-	localparam ClkPeriod = 2*HalfClkPeriod;
+	parameter ClkPeriod = 2*HalfClkPeriod;
 
-	localparam vc_bits = (`NUM_VCS > 1) ? $clog2(`NUM_VCS) : 1;
-	localparam dest_bits = $clog2(`NUM_USER_RECV_PORTS);
-	localparam flit_port_width = 2 /*valid and tail bits*/+ `FLIT_DATA_WIDTH + dest_bits + vc_bits;
-	localparam credit_port_width = 1 + vc_bits; // 1 valid bit
-	localparam credit_cnt_width = $clog2(`FLIT_BUFFER_DEPTH + 1);
+	parameter vc_bits = (`NUM_VCS > 1) ? $clog2(`NUM_VCS) : 1;
+	parameter dest_bits = $clog2(`NUM_USER_RECV_PORTS);
+	parameter flit_port_width = 2 /*valid and tail bits*/+ `FLIT_DATA_WIDTH + dest_bits + vc_bits;
+	parameter credit_port_width = 1 + vc_bits; // 1 valid bit
+	parameter credit_cnt_width = $clog2(`FLIT_BUFFER_DEPTH + 1);
 
 	reg clk;
 	reg rst_n;
