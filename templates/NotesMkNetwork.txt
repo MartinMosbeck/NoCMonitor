@@ -5,71 +5,71 @@ Notizen
 
 In mkNetwork
 -------------
-<X> =0..15
+%%X =0..15
 
-send_ports_<X>_putFlit_flit_in ; input
-EN_send_ports_<X>_putFlit ; input
+send_ports_%%X_putFlit_flit_in ; input
+EN_send_ports_%%X_putFlit ; input
 
-EN_send_ports_<X>_getCredits ; input
-send_ports_<X>_getCredits ; output ; wire [1 : 0]
+EN_send_ports_%%X_getCredits ; input
+send_ports_%%X_getCredits ; output ; wire [1 : 0]
 
-EN_recv_ports_<X>_getFlit ; input
-recv_ports_<X>_getFlit ; output ; wire [70 : 0]
+EN_recv_ports_%%X_getFlit ; input
+recv_ports_%%X_getFlit ; output ; wire [70 : 0]
 
-recv_ports_<X>_putCredits_cr_in ; input
-EN_recv_ports_<X>_putCredits ; input
+recv_ports_%%X_putCredits_cr_in ; input
+EN_recv_ports_%%X_putCredits ; input
 
-recv_ports_info_<X>_getRecvPortID ; output ; wire [3 : 0]
+recv_ports_info_%%X_getRecvPortID ; output ; wire [3 : 0]
 
 Connecting Signals
 ------------------
 
-wire [flit_port_width-1:0] PE<X>_flitToNet;
-wire PE<X>_sendFlit;
+wire [flit_port_width-1:0] PE%%X_flitToNet;
+wire PE%%X_sendFlit;
 
-wire [flit_port_width-1:0] PE<X>_flitFromNet;
-wire PE<X>_enRecvFlit;
+wire [flit_port_width-1:0] PE%%X_flitFromNet;
+wire PE%%X_enRecvFlit;
 
-wire [credit_port_width-1:0] PE<X>_creditToNet;
-wire PE<X>_sendCredit;
+wire [credit_port_width-1:0] PE%%X_creditToNet;
+wire PE%%X_sendCredit;
 
-wire [credit_port_width-1:0] PE<X>_creditFromNet;
-wire PE<X>_enRecvCredit;
+wire [credit_port_width-1:0] PE%%X_creditFromNet;
+wire PE%%X_enRecvCredit;
 
-wire [dest_bits-1:0] PE<X>_recvPortID;
+wire [dest_bits-1:0] PE%%X_recvPortID;
 
-wire PE<X>_EN;
+wire PE%%X_EN;
 
 mkNetwork instantiation
 -----------------------
-.send_ports_<X>_putFlit_flit_in(PE<X>_flitToNet),
-.EN_send_ports_<X>_putFlit(PE<X>_sendFlit),
-.recv_ports_<X>_getFlit(PE<X>_flitFromNet ,
-.EN_recv_ports_<X>_getFlit(PE<X>_enRecvFlit)),
-.recv_ports_<X>_putCredits_cr_in(PE<X>_creditToNet),
-.EN_recv_ports_<X>_putCredits(PE<X>_sendCredit),
-.send_ports_<X>_getCredits(PE<X>_creditFromNet),
-.EN_send_ports_<X>_getCredits(PE<X>_enRecvCredit),
-.recv_ports_info_<X>_getRecvPortID(PE<X>_recvPortID),
+.send_ports_%%X_putFlit_flit_in(PE%%X_flitToNet),
+.EN_send_ports_%%X_putFlit(PE%%X_sendFlit),
+.recv_ports_%%X_getFlit(PE%%X_flitFromNet ,
+.EN_recv_ports_%%X_getFlit(PE%%X_enRecvFlit)),
+.recv_ports_%%X_putCredits_cr_in(PE%%X_creditToNet),
+.EN_recv_ports_%%X_putCredits(PE%%X_sendCredit),
+.send_ports_%%X_getCredits(PE%%X_creditFromNet),
+.EN_send_ports_%%X_getCredits(PE%%X_enRecvCredit),
+.recv_ports_info_%%X_getRecvPortID(PE%%X_recvPortID),
 
-PE_<X> instantiation
+PE_%%X instantiation
 -------------------
-PE_<X> pe<X>
+PE_%%X pe%%X
 (
-        .en(PE<X>_EN),        
+        .en(PE%%X_EN),        
 	.clk(clk),
 	.rst_n(rst_n),
 	
-	.flit_in(PE<X>_flitFromNet),
-	.flit_out(PE<X>_flitToNet),
-	.sendFlit(PE<X>_sendFlit),
-	.en_receiveFlit(PE<X>_enRecvFlit),
+	.flit_in(PE%%X_flitFromNet),
+	.flit_out(PE%%X_flitToNet),
+	.sendFlit(PE%%X_sendFlit),
+	.en_receiveFlit(PE%%X_enRecvFlit),
 
-	.credit_in(PE<X>_creditFromNet),
-	.credit_out(PE<X>_creditToNet),
-	.sendCredit(PE<X>_sendCredit),
-	.en_receiveCredit(PE<X>_enRecvCredit),
+	.credit_in(PE%%X_creditFromNet),
+	.credit_out(PE%%X_creditToNet),
+	.sendCredit(PE%%X_sendCredit),
+	.en_receiveCredit(PE%%X_enRecvCredit),
 	
-	.recvPortID(PE<X>_recvPortID)
+	.recvPortID(PE%%X_recvPortID)
 );
 
