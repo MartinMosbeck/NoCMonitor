@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>mainWindow</class>
+ <widget class="QMainWindow" name="mainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>658</width>
+    <height>544</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>651</width>
+      <height>491</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>658</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuActions">
+    <property name="title">
+     <string>Actions</string>
+    </property>
+    <widget class="QMenu" name="menuSet_all_traffic_to">
+     <property name="title">
+      <string>Set all traffic to</string>
+     </property>
+     <addaction name="actionRandom"/>
+     <addaction name="actionBit_complement"/>
+     <addaction name="actionBit_reverse"/>
+     <addaction name="actionBit_rotation"/>
+     <addaction name="actionTranspose"/>
+     <addaction name="actionShuffle"/>
+    </widget>
+    <addaction name="actionCreate_PEs"/>
+    <addaction name="separator"/>
+    <addaction name="menuSet_all_traffic_to"/>
+    <addaction name="actionSafe_Configutation"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuActions"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionCreate_PEs">
+   <property name="text">
+    <string>Create PEs</string>
+   </property>
+  </action>
+  <action name="actionRandom">
+   <property name="text">
+    <string>random</string>
+   </property>
+  </action>
+  <action name="actionBit_complement">
+   <property name="text">
+    <string>bit_complement</string>
+   </property>
+  </action>
+  <action name="actionBit_reverse">
+   <property name="text">
+    <string>bit_reverse</string>
+   </property>
+  </action>
+  <action name="actionBit_rotation">
+   <property name="text">
+    <string>bit_rotation</string>
+   </property>
+  </action>
+  <action name="actionTranspose">
+   <property name="text">
+    <string>transpose</string>
+   </property>
+  </action>
+  <action name="actionShuffle">
+   <property name="text">
+    <string>shuffle</string>
+   </property>
+  </action>
+  <action name="actionSafe_Configutation">
+   <property name="text">
+    <string>Save Configutation</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>mainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
