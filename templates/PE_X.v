@@ -80,6 +80,7 @@ module PE_%%X
 //# SENDING FLITS CONTROL #
 //#########################
 	reg [31 : 0] cnt_cycle;
+        reg [dest_bits-1:0] src=%%X;
 	// packet fields
 	reg is_valid;
 	reg is_tail;
