@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>446</width>
-    <height>238</height>
+    <height>228</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -69,6 +69,11 @@
       <item>
        <property name="text">
         <string>shuffle</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>manual</string>
        </property>
       </item>
      </widget>

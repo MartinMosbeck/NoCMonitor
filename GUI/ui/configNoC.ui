@@ -55,7 +55,14 @@
     <item row="0" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QSpinBox" name="mesh_height"/>
+       <widget class="QSpinBox" name="mesh_height">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer">
@@ -85,7 +92,14 @@
     <item row="1" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QSpinBox" name="mesh_width"/>
+       <widget class="QSpinBox" name="mesh_width">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -115,7 +129,7 @@
     <item row="2" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QLineEdit" name="connect_dir"/>
+       <widget class="QLineEdit" name="connect_directory"/>
       </item>
      </layout>
     </item>
@@ -181,7 +195,14 @@
     <item row="0" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
-       <widget class="QSpinBox" name="flit_data_width"/>
+       <widget class="QSpinBox" name="flit_data_width">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer_4">
@@ -204,7 +225,11 @@
     <item row="1" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_6">
       <item>
-       <widget class="QSpinBox" name="flit_buffer_depth"/>
+       <widget class="QSpinBox" name="flit_buffer_depth">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer_3">
@@ -260,7 +285,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QPushButton" name="button_next">
+  <widget class="QPushButton" name="button_accept">
    <property name="geometry">
     <rect>
      <x>200</x>
@@ -270,14 +295,14 @@
     </rect>
    </property>
    <property name="text">
-    <string>Next</string>
+    <string>Accept</string>
    </property>
   </widget>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>button_next</sender>
+   <sender>button_accept</sender>
    <signal>clicked()</signal>
    <receiver>configNoC</receiver>
    <slot>accept()</slot>

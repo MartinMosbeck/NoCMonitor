@@ -49,11 +49,13 @@
      <addaction name="actionBit_rotation"/>
      <addaction name="actionTranspose"/>
      <addaction name="actionShuffle"/>
+     <addaction name="actionManual"/>
     </widget>
-    <addaction name="actionCreate_PEs"/>
-    <addaction name="separator"/>
+    <addaction name="actionCreate_new_Configuration"/>
+    <addaction name="actionConfigure_PEs"/>
     <addaction name="menuSet_all_traffic_to"/>
     <addaction name="actionSafe_Configutation"/>
+    <addaction name="actionCreateFiles"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -71,9 +73,9 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actionCreate_PEs">
+  <action name="actionCreateFiles">
    <property name="text">
-    <string>Create PEs</string>
+    <string>Create Files</string>
    </property>
   </action>
   <action name="actionRandom">
@@ -114,6 +116,21 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionCreate_new_Configuration">
+   <property name="text">
+    <string>Create Mesh Configuration</string>
+   </property>
+  </action>
+  <action name="actionConfigure_PEs">
+   <property name="text">
+    <string>Configure PEs</string>
+   </property>
+  </action>
+  <action name="actionManual">
+   <property name="text">
+    <string>manual</string>
    </property>
   </action>
  </widget>
