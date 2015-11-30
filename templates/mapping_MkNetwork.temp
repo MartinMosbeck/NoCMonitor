@@ -1,0 +1,9 @@
+.send_ports_%%X_putFlit_flit_in(PE%%X_flitToNet),
+.EN_send_ports_%%X_putFlit(PE%%X_sendFlit),
+.recv_ports_%%X_getFlit(PE%%X_flitFromNet), 
+.EN_recv_ports_%%X_getFlit(PE%%X_enRecvFlit),
+.recv_ports_%%X_putCredits_cr_in(PE%%X_creditToNet),
+.EN_recv_ports_%%X_putCredits(PE%%X_sendCredit),
+.send_ports_%%X_getCredits(PE%%X_creditFromNet),
+.EN_send_ports_%%X_getCredits(PE%%X_enRecvCredit),
+.recv_ports_info_%%X_getRecvPortID(PE%%X_recvPortID)

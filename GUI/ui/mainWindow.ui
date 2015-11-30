@@ -55,7 +55,7 @@
     <addaction name="actionConfigure_PEs"/>
     <addaction name="menuSet_all_traffic_to"/>
     <addaction name="actionSafe_Configutation"/>
-    <addaction name="actionCreateFiles"/>
+    <addaction name="actionCreate_Files"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -73,7 +73,7 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actionCreateFiles">
+  <action name="actionCreate_Files">
    <property name="text">
     <string>Create Files</string>
    </property>

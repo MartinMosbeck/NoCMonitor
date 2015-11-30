@@ -1,0 +1,20 @@
+PE_%%X pe%%X
+(
+        .en(PE%%X_EN),        
+	.clk(clk),
+	.rst_n(rst_n),
+	
+	.flit_in(PE%%X_flitFromNet),
+	.flit_out(PE%%X_flitToNet),
+	.sendFlit(PE%%X_sendFlit),
+	.en_receiveFlit(PE%%X_enRecvFlit),
+
+	.credit_in(PE%%X_creditFromNet),
+	.credit_out(PE%%X_creditToNet),
+	.sendCredit(PE%%X_sendCredit),
+	.en_receiveCredit(PE%%X_enRecvCredit),
+	
+	.recvPortID(PE%%X_recvPortID)
+);
+
+

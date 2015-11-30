@@ -4,7 +4,12 @@ from configNoC import Ui_configNoC
 from configPE import Ui_configPE
 from mainWindow import Ui_mainWindow
 import sys
+import math
+import string
 from enum import Enum
+
+class MyTemplate(string.Template):
+    delimiter = "%%"
 
 class Traffic_Patterns(Enum):
     random = 0
@@ -24,6 +29,7 @@ class NoC_Configurator:
         self.mainWindow.show()
         self.mainWindow_ui.actionCreate_new_Configuration.triggered.connect(self.new_config)
         self.mainWindow_ui.actionConfigure_PEs.triggered.connect(self.configure_PEs)
+        self.mainWindow_ui.actionCreate_Files.triggered.connect(self.create_Files)
         self.define_mesh_variables()
 
     def execute(self):
@@ -76,6 +82,7 @@ class NoC_Configurator:
                 num = num+1
 
     def setPEDefaults(self):
+        #TODO: handle random and manulal
         self.PE_pattern = []
         self.PE_dest = []
         self.PE_duty = []
@@ -90,18 +97,91 @@ class NoC_Configurator:
         self.configPE_ui = Ui_configPE()
         self.configPE_ui.setupUi(self.configPE)
         self.setValues_PEui(self.configPE_ui,X)
-        self.configPE.accepted.connect(self.PE_config_accepted(self.configPE_ui,X))
+        self.configPE.accepted.connect(lambda: self.PE_config_accepted(self.configPE_ui,X))
         self.configPE.show()
 
     def setValues_PEui(self,ui,X):
+        #TODO: handle random and manulal
         ui.traffic_pattern.setCurrentIndex(self.PE_pattern[X].value)
         ui.implied_destination.setText(str(self.PE_dest[X]))
         ui.duty_cycle.setValue(self.PE_duty[X])
 
     def PE_config_accepted(self,ui,X):
-        a=1 
+        #TODO: handle random and manulal
+        self.PE_pattern[X] = Traffic_Patterns(ui.traffic_pattern.currentIndex())
+        self.PE_dest[X] = self.pattern_to_dest(self.PE_pattern[X])
+        self.PE_duty[X] = ui.duty_cycle.value()
+
     def pattern_to_dest(self,pattern):
         return 1
+
+    def create_Files(self):
+        #create PE_X files
+        filename_tmp="../../templates/PE_X.temp"
+        for i in range(0,self.mesh_width*self.mesh_height):
+            parameters={"X":str(i),"DEST":str(self.PE_dest[i]),"DUTY_PERIOD":str(math.ceil(100/self.PE_duty[i]))}
+         
+            with open (filename_tmp, "r") as template_file:
+                data=template_file.read()
+
+            filename_out =self.connect_directory+"/"+"PE_{0}.v".format(i)
+            with open (filename_out, "w") as output_file:
+                s = MyTemplate(data)
+                output_file.write(s.substitute(parameters)) 
+
+        '''
+        #create connecting wires
+        connections = ""
+        filename_tmp="../../templates/connection.temp"
+        for i in range(0,self.mesh_width*self.mesh_height):
+            parameters={"X":str(i)}
+         
+            with open (filename_tmp, "r") as template_file:
+                data=template_file.read()
+
+            s = MyTemplate(data)
+            s.substitute(parameters)
+            connections=connections+s
+
+        #create PE instantiations
+        create_PEs = ""
+        filename_tmp="../../templates/create_PE.temp"
+        for i in range(0,self.mesh_width*self.mesh_height):
+            parameters={"X":str(i)}
+         
+            with open (filename_tmp, "r") as template_file:
+                data=template_file.read()
+
+            s = MyTemplate(data)
+            output_file.write(s.substitute(parameters)) 
+            createPEs=createPEs+s
+
+        mappings_mkNetwork=""
+        filename_tmp="mapping_MkNetwork.temp"
+        for i in range(0,self.mesh_width*self.mesh_height):
+            parameters={"X":str(i)}
+         
+            with open (filename_tmp, "r") as template_file:
+                data=template_file.read()
+
+            s = MyTemplate(data)
+            output_file.write(s.substitute(parameters)) 
+            mappings_mkNetwork=mappings_mkNetwork+s
+
+        #create testbench
+        filename_tmp="../../templates/testbench.temp"
+        parameters={"CONNECTIONS":connections,"CREATE_PEs":createPEs,"MAPPINGS_mkNetwork":mappings_mkNetwork}
+         
+        with open (filename_tmp, "r") as template_file:
+            data=template_file.read()
+
+        filename_out =self.connect_directory+"/testbench.v"
+        with open (filename_out, "w") as output_file:
+            s = MyTemplate(data)
+            output_file.write(s.substitute(parameters))
+        '''
+        
+
                 
 
 if __name__ == "__main__":

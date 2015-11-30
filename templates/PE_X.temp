@@ -1,6 +1,8 @@
-//TEMPLATE (%%...) parameter:
+//TEMPLATE parameter:
 // X = PE ID
 // SEND_PROFILE = Code for sending 
+// DEST
+// DUTY_PERIOD
 
 `include "connect_parameter.v"
 
@@ -80,7 +82,7 @@ module PE_%%X
 //# SENDING FLITS CONTROL #
 //#########################
 	reg [31 : 0] cnt_cycle;
-        reg [dest_bits-1:0] src=%%X;
+        reg [dest_bits-1:0] src;
 	// packet fields
 	reg is_valid;
 	reg is_tail;
@@ -96,6 +98,8 @@ always @ (posedge clk or negedge rst_n)
 begin
         if (~rst_n)
 	begin
+                src = %%X;
+                dest = %%DEST; 
 		en_receiveFlit = 0;
 		en_receiveCredit = 0;
                 sendFlit = 0;
@@ -138,22 +142,23 @@ begin
 
 
                 //send a flit 
-                %%SEND_PROFILE
+                //in Future: SEND_PROFILE
 
-		//if(cnt_cycle%10 == 0)
-		//begin
-		//	dest = 4;
-		//	vc = 0;
-		//	data = 'ha;
-		//	flit_out = {1'b1 /*valid*/, 1'b0 /*tail*/, dest, vc, data};
-		//	sendFlit = 1;
-		//	$display("PE(%%X) @%3d: Flit '%0x' sent", cnt_cycle, flit_out[63:0]);
-                //
-                //      cnt_credit[vc] = cnt_credit[vc]-1;
-                //      $display("PE(%%X) @%3d: Consumed credit for vc%0d",cnt_cycle, vc);
-                //      $display("PE(%%X) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
+		if(cnt_cycle% %%DUTY_PERIOD == 0)
+		begin
+	        	dest = 4;
+			vc = 0;
+		        data = %%X;
+		        flit_out = {1'b1 /*valid*/, 1'b0 /*tail*/, dest, vc, data};
+			sendFlit = 1;
+			$display("PE(%%X) @%3d: Flit '%0x' sent", cnt_cycle, flit_out[63:0]);
+                
+                        cnt_credit[vc] = cnt_credit[vc]-1;
+                        $display("PE(%%X) @%3d: Consumed credit for vc%0d",cnt_cycle, vc);
+                        $display("PE(%%X) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
 
-	end
+	        end
+        end
 	else if (en==0)
         begin
                 en_receiveFlit = 0;
