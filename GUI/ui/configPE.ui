@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
-    <height>266</height>
+    <width>439</width>
+    <height>260</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -133,13 +133,13 @@
       <item>
        <widget class="QDoubleSpinBox" name="packet_injection_rate">
         <property name="minimum">
-         <double>0.010000000000000</double>
+         <double>0.100000000000000</double>
         </property>
         <property name="maximum">
          <double>1.000000000000000</double>
         </property>
         <property name="singleStep">
-         <double>0.010000000000000</double>
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>0.100000000000000</double>
@@ -196,19 +196,6 @@
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QLabel" name="PE_label">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>PE_X Parameters</string>
-   </property>
   </widget>
   <widget class="Line" name="line">
    <property name="geometry">
@@ -285,6 +272,48 @@
        </size>
       </property>
      </spacer>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>371</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="PE_label">
+      <property name="text">
+       <string>PE_X Parameters</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="PE_enabled">
+      <property name="text">
+       <string>enabled</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

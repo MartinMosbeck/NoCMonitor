@@ -62,6 +62,9 @@
         <property name="maximum">
          <number>100</number>
         </property>
+        <property name="value">
+         <number>4</number>
+        </property>
        </widget>
       </item>
       <item>
@@ -96,6 +99,9 @@
         <property name="maximum">
          <number>100</number>
         </property>
+        <property name="value">
+         <number>4</number>
+        </property>
        </widget>
       </item>
       <item>
@@ -123,7 +129,11 @@
     <item row="2" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QLineEdit" name="connect_directory"/>
+       <widget class="QLineEdit" name="connect_directory">
+        <property name="text">
+         <string>/home/martin/noc</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -189,6 +199,9 @@
         <property name="maximum">
          <number>100</number>
         </property>
+        <property name="value">
+         <number>8</number>
+        </property>
        </widget>
       </item>
       <item>
@@ -215,6 +228,9 @@
         </property>
         <property name="maximum">
          <number>100</number>
+        </property>
+        <property name="value">
+         <number>64</number>
         </property>
        </widget>
       </item>
@@ -256,6 +272,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QComboBox" name="default_traffic_pattern">
+        <property name="currentText">
+         <string>bit_reverse</string>
+        </property>
+        <property name="currentIndex">
+         <number>2</number>
+        </property>
         <item>
          <property name="text">
           <string>random</string>
@@ -321,13 +343,13 @@
       <item>
        <widget class="QDoubleSpinBox" name="default_packet_injection_rate">
         <property name="minimum">
-         <double>0.010000000000000</double>
+         <double>0.100000000000000</double>
         </property>
         <property name="maximum">
          <double>1.000000000000000</double>
         </property>
         <property name="singleStep">
-         <double>0.010000000000000</double>
+         <double>0.100000000000000</double>
         </property>
         <property name="value">
          <double>0.100000000000000</double>

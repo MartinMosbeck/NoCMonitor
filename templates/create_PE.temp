@@ -1,20 +1,21 @@
-PE_%%X pe%%X
-(
-        .en(PE%%X_EN),        
-	.clk(clk),
-	.rst_n(rst_n),
+        
+        //PE_{{ X }} instantiation        
+        PE_{{ X }} pe{{ X }}
+        (
+                .en(PE{{ X }}_EN),        
+	        .clk(clk),
+	        .rst_n(rst_n),
 	
-	.flit_in(PE%%X_flitFromNet),
-	.flit_out(PE%%X_flitToNet),
-	.sendFlit(PE%%X_sendFlit),
-	.en_receiveFlit(PE%%X_enRecvFlit),
+	        .flit_in(PE{{ X }}_flitFromNet),
+	        .flit_out(PE{{ X }}_flitToNet),
+	        .sendFlit(PE{{ X }}_sendFlit),
+	        .en_receiveFlit(PE{{ X }}_enRecvFlit),
 
-	.credit_in(PE%%X_creditFromNet),
-	.credit_out(PE%%X_creditToNet),
-	.sendCredit(PE%%X_sendCredit),
-	.en_receiveCredit(PE%%X_enRecvCredit),
+	        .credit_in(PE{{ X }}_creditFromNet),
+	        .credit_out(PE{{ X }}_creditToNet),
+	        .sendCredit(PE{{ X }}_sendCredit),
+	        .en_receiveCredit(PE{{ X }}_enRecvCredit),
 	
-	.recvPortID(PE%%X_recvPortID)
-);
-
+	        .recvPortID(PE{{ X }}_recvPortID)
+        );
 

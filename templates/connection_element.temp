@@ -1,0 +1,18 @@
+        
+        //Connection elements for PE_{{ X }}        
+        wire [flit_port_width-1:0] PE{{ X }}_flitToNet;
+        wire PE{{ X }}_sendFlit;
+
+        wire [flit_port_width-1:0] PE{{ X }}_flitFromNet;
+        wire PE{{ X }}_enRecvFlit;
+
+        wire [credit_port_width-1:0] PE{{ X }}_creditToNet;
+        wire PE{{ X }}_sendCredit;
+
+        wire [credit_port_width-1:0] PE{{ X }}_creditFromNet;
+        wire PE{{ X }}_enRecvCredit;
+
+        wire [dest_bits-1:0] PE{{ X }}_recvPortID;
+
+        reg PE{{ X }}_EN;
+

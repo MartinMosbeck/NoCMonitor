@@ -1,12 +1,13 @@
-//TEMPLATE parameter:
+//TEMPLATE parameters:
 // X = PE ID
-// SEND_PROFILE = Code for sending 
-// DEST
-// DUTY_PERIOD
+// SEND_COUNTER_INCREMENT = how much is added in each cycle to the
+// send_cycle_cnt; If send_cycle_cnt>=1 a packet is sent
+// DEST  = Destination
+// PIR  = Packet Injection Rate
 
-`include "connect_parameter.v"
+`include "connect_parameters.v"
 
-module PE_%%X
+module PE_{{ X }}
 (
 	en,        
 	clk,
@@ -72,6 +73,9 @@ module PE_%%X
 	input [dest_bits-1:0] recvPortID;
 	wire  [dest_bits-1:0] recvPortID;
 
+        /*send counter*/
+        reg [3:0] send_cycle_cnt;//TODO: is 4 bits needed?
+
 //####################################
 //# FLOW CONTROL BUFFERS &  COUNTERS #
 //####################################
@@ -98,8 +102,8 @@ always @ (posedge clk or negedge rst_n)
 begin
         if (~rst_n)
 	begin
-                src = %%X;
-                dest = %%DEST; 
+                src = {{ X }};
+                dest = {{ DEST }}; 
 		en_receiveFlit = 0;
 		en_receiveCredit = 0;
                 sendFlit = 0;
@@ -110,7 +114,8 @@ begin
 		for(i=0; i < `NUM_VCS; i = i + 1) 
 		        cnt_credit[i] = `FLIT_BUFFER_DEPTH;
 		
-		cnt_cycle = 0;	
+		cnt_cycle = 0;
+                send_cycle_cnt = 0;	
 	end
 
 	else if(en == 1)
@@ -124,11 +129,12 @@ begin
                 credit_out = 0;
 
 	        cnt_cycle = cnt_cycle + 1;
+                send_cycle_cnt = send_cycle_cnt + {{ SEND_COUNTER_INCREMENT }};
 	
 		//receive a flit
 		if (flit_in[flit_port_width-1] == 1) //flit is valid
 		begin
-			$display("PE(%%X) @%3d: Flit '%0x' received", cnt_cycle, flit_in[63:0]);
+			$display("PE({{ X }}) @%3d: Flit '%0x' received", cnt_cycle, flit_in[63:0]);
 		end			
 
                 //receive a credit
@@ -136,26 +142,24 @@ begin
                 begin
                    vc = credit_in[credit_port_width-2 : 0];
                    cnt_credit[vc]=cnt_credit[vc]+1;
-                   $display("PE(%%X) @%3d: Received credit for vc%0d",cnt_cycle, vc);
-                   $display("PE(%%X) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
+                   //$display("PE({{ X }}) @%3d: Received credit for vc%0d",cnt_cycle, vc);
+                   //$display("PE({{ X }}) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
                 end	
 
 
                 //send a flit 
-                //in Future: SEND_PROFILE
-
-		if(cnt_cycle% %%DUTY_PERIOD == 0)
+		if(send_cycle_cnt >= 10)
 		begin
-	        	dest = 4;
+                        send_cycle_cnt = send_cycle_cnt -10;
 			vc = 0;
-		        data = %%X;
+		        data = {{ X }};
 		        flit_out = {1'b1 /*valid*/, 1'b0 /*tail*/, dest, vc, data};
 			sendFlit = 1;
-			$display("PE(%%X) @%3d: Flit '%0x' sent", cnt_cycle, flit_out[63:0]);
+			$display("PE({{ X }}) @%3d: Flit '%0x' sent", cnt_cycle, flit_out[63:0]);
                 
                         cnt_credit[vc] = cnt_credit[vc]-1;
-                        $display("PE(%%X) @%3d: Consumed credit for vc%0d",cnt_cycle, vc);
-                        $display("PE(%%X) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
+                        //$display("PE({{ X }}) @%3d: Consumed credit for vc%0d",cnt_cycle, vc);
+                        //$display("PE({{ X }}) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
 
 	        end
         end
