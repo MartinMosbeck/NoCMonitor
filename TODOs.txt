@@ -1,0 +1,5 @@
+Send random Traffic
+Have output buffer
+Care for send credits
+multiple flit per packet
+random destinations for random traffic pattern

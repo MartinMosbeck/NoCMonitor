@@ -99,7 +99,12 @@ class NoC_Configurator:
 
         for i in range (0,self.mesh_width*self.mesh_height):
             self.PE_traffic_pattern.append(self.default_traffic_pattern)
-            self.PE_dest.append(self.pattern_to_dest(self.default_traffic_pattern,i))
+            
+            #for manual set to 0 for default 
+            if(self.default_traffic_pattern==Traffic_Patterns.manual):
+                self.PE_dest.append(0)
+            else:
+                self.PE_dest.append(self.pattern_to_dest(self.default_traffic_pattern,i))
             self.PE_packet_injection_rate.append(self.default_packet_injection_rate)
             self.PE_flits_per_packet.append(self.default_flits_per_packet)  
             self.PE_enabled.append(True)                      
@@ -122,6 +127,10 @@ class NoC_Configurator:
         ui.PE_label.setText("PE_{0} Parameters".format(X))
         ui.PE_enabled.setChecked(True);
         ui.traffic_pattern.setCurrentIndex(self.PE_traffic_pattern[X].value)
+        #if manual enable the dest field
+        if(self.PE_traffic_pattern[X]==Traffic_Patterns.manual):
+            ui.implied_destination.setEnabled(True);
+  
         ui.implied_destination.setText(str(self.PE_dest[X]))
         ui.packet_injection_rate.setValue(self.PE_packet_injection_rate[X])
         ui.flits_per_packet.setValue(self.PE_flits_per_packet[X])
@@ -129,11 +138,15 @@ class NoC_Configurator:
     
     def onTrafficPatternChanged (self,ui,X):
         new_traffic_pattern=Traffic_Patterns(ui.traffic_pattern.currentIndex())
-        new_dest= self.pattern_to_dest(new_traffic_pattern,X)
-        ui.implied_destination.setText(str(new_dest))
+        #enable if manual selected
+        if(new_traffic_pattern==Traffic_Patterns.manual):
+            ui.implied_destination.setEnabled(True)
+        else:
+            new_dest= self.pattern_to_dest(new_traffic_pattern,X)
+            ui.implied_destination.setText(str(new_dest))
+            ui.implied_destination.setEnabled(False);
 
     def PE_config_accepted(self,ui,X):
-        #TODO: handle random and manulal
         self.PE_traffic_pattern[X] = Traffic_Patterns(ui.traffic_pattern.currentIndex())
         self.PE_dest[X] = int(ui.implied_destination.text())
         self.PE_packet_injection_rate[X] = ui.packet_injection_rate.value()
