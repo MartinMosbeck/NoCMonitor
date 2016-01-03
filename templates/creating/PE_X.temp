@@ -81,6 +81,16 @@ module PE_{{ X }}
         /*send counter*/
         reg [3:0] send_cycle_cnt;//TODO: is 4 bits needed?
 
+        /* router packet counters */
+        input  [`FLIT_DATA_WIDTH-1:0] count_N;	
+	wire   [`FLIT_DATA_WIDTH-1:0] count_N;
+        input  [`FLIT_DATA_WIDTH-1:0] count_E;	
+	wire   [`FLIT_DATA_WIDTH-1:0] count_E;
+        input  [`FLIT_DATA_WIDTH-1:0] count_S;	
+	wire   [`FLIT_DATA_WIDTH-1:0] count_S;
+        input  [`FLIT_DATA_WIDTH-1:0] count_W;	
+	wire   [`FLIT_DATA_WIDTH-1:0] count_W;
+
 //####################################
 //# FLOW CONTROL BUFFERS &  COUNTERS #
 //####################################
@@ -168,6 +178,7 @@ begin
                         //$display("PE({{ X }}) @%3d: Credit for for vc%0d now at %0d",cnt_cycle, vc,cnt_credit[vc] );
 
 	        end
+
         end
 	else if (en==0)
         begin

@@ -1,6 +1,6 @@
-  output  countEnq;
+  output [63:0] countEnq;
   output  RDY_countEnq;
   wire [{{ DATALEN-1 }}:0] countEnq;
   wire RDY_countEnq;
-  assign RDY_countEnq = 1'd1';
+  assign RDY_countEnq = 1'd1;
   assign countEnq = outPortFIFO_ifc_fifo_enq_cnt;

@@ -18,10 +18,10 @@
 
         reg PE{{ X }}_EN;
 
-        wire [flit_port_width-1:0] router{{ X }}_cnt1;
-        wire [flit_port_width-1:0] router{{ X }}_cnt2;
-        wire [flit_port_width-1:0] router{{ X }}_cnt3;
-        wire [flit_port_width-1:0] router{{ X }}_cnt4;
+        wire [`FLIT_DATA_WIDTH-1:0] router{{ X }}_cnt1;
+        wire [`FLIT_DATA_WIDTH-1:0] router{{ X }}_cnt2;
+        wire [`FLIT_DATA_WIDTH-1:0] router{{ X }}_cnt3;
+        wire [`FLIT_DATA_WIDTH-1:0] router{{ X }}_cnt4;
 
 {% endfor %}
 

@@ -32,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>658</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuActions">
@@ -54,8 +54,8 @@
     <addaction name="actionCreate_new_Configuration"/>
     <addaction name="actionConfigure_PEs"/>
     <addaction name="menuSet_all_traffic_to"/>
-    <addaction name="actionSafe_Configutation"/>
     <addaction name="actionCreate_Files"/>
+    <addaction name="actionPatch_Files"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -75,7 +75,7 @@
   </action>
   <action name="actionCreate_Files">
    <property name="text">
-    <string>Create Files</string>
+    <string>3)Create Files</string>
    </property>
   </action>
   <action name="actionRandom">
@@ -120,17 +120,22 @@
   </action>
   <action name="actionCreate_new_Configuration">
    <property name="text">
-    <string>Create Mesh Configuration</string>
+    <string>1)Create Mesh Configuration</string>
    </property>
   </action>
   <action name="actionConfigure_PEs">
    <property name="text">
-    <string>Configure PEs</string>
+    <string>2)Configure PEs</string>
    </property>
   </action>
   <action name="actionManual">
    <property name="text">
     <string>manual</string>
+   </property>
+  </action>
+  <action name="actionPatch_Files">
+   <property name="text">
+    <string>4)Patch Files</string>
    </property>
   </action>
  </widget>

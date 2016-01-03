@@ -33,6 +33,7 @@ class NoC_Configurator:
         self.mainWindow_ui.actionCreate_new_Configuration.triggered.connect(self.new_config)
         self.mainWindow_ui.actionConfigure_PEs.triggered.connect(self.configure_PEs)
         self.mainWindow_ui.actionCreate_Files.triggered.connect(self.create_Files)
+        self.mainWindow_ui.actionPatch_Files.triggered.connect(self.patch_Files)
         self.define_mesh_variables()
 
     def execute(self):
@@ -247,6 +248,8 @@ class NoC_Configurator:
         file_out.write(data_out)
         file_out.close()
 
+    def patch_Files(self):
+        self.setUpTemplateEnv()
         #PATCHING OPERATIONS
         self.patch_MkNetwork()
         self.patch_FIFO()
