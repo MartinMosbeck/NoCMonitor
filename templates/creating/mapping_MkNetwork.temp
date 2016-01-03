@@ -1,5 +1,7 @@
-                
-                //Mappings for PE_{{ X }}                
+{% for X in range(0,ROUTERNUM,1) %}
+                //#-------------------------#
+                //# Mappings for PE_{{ X }} #
+                //#-------------------------#
                 .send_ports_{{ X }}_putFlit_flit_in(PE{{ X }}_flitToNet),
                 .EN_send_ports_{{ X }}_putFlit(PE{{ X }}_sendFlit),
                 .recv_ports_{{ X }}_getFlit(PE{{ X }}_flitFromNet), 
@@ -8,4 +10,9 @@
                 .EN_recv_ports_{{ X }}_putCredits(PE{{ X }}_sendCredit),
                 .send_ports_{{ X }}_getCredits(PE{{ X }}_creditFromNet),
                 .EN_send_ports_{{ X }}_getCredits(PE{{ X }}_enRecvCredit),
-                .recv_ports_info_{{ X }}_getRecvPortID(PE{{ X }}_recvPortID)
+                .recv_ports_info_{{ X }}_getRecvPortID(PE{{ X }}_recvPortID),
+                .router{{ X }}_flitCnt_1(router{{ X }}_cnt1),
+                .router{{ X }}_flitCnt_2(router{{ X }}_cnt2),
+                .router{{ X }}_flitCnt_3(router{{ X }}_cnt3),
+                .router{{ X }}_flitCnt_4(router{{ X }}_cnt4){% if X != ROUTERNUM-1 %},{% endif %} 
+{% endfor %}

@@ -3,16 +3,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from configNoC import Ui_configNoC
 from configPE import Ui_configPE
 from mainWindow import Ui_mainWindow
+
 import sys
 import math
 import string
 from enum import Enum
-from BitVector import *
 import functools
-from jinja2 import Template
 
-class MyTemplate(string.Template):
-    delimiter = "%%"
+from BitVector import *
+
+from jinja2 import Environment, FileSystemLoader
 
 class Traffic_Patterns(Enum):
     random = 0
@@ -45,9 +45,11 @@ class NoC_Configurator:
         self.connect_directory = ""
         self.flit_data_width = 1
         self.flit_buffer_depth = 1
+        self.num_vc= 2
         self.default_traffic_pattern = Traffic_Patterns.random
         self.default_packet_injection_rate = 0.1
         self.default_flits_per_packet = 1
+
 
     def new_config(self):
         self.configNoC = QtWidgets.QDialog()
@@ -64,6 +66,7 @@ class NoC_Configurator:
         self.connect_directory = configNoC_ui.connect_directory.text()
         self.flit_data_width = configNoC_ui.flit_data_width.value()
         self.flit_buffer_depth = configNoC_ui.flit_buffer_depth.value()
+        self.num_vc= configNoC_ui.virtual_channels.value()
         self.default_traffic_pattern = Traffic_Patterns(configNoC_ui.default_traffic_pattern.currentIndex())
         self.default_packet_injection_rate = configNoC_ui.default_packet_injection_rate.value()
         self.default_flits_per_packet = configNoC_ui.default_flits_per_packet.value()
@@ -123,7 +126,7 @@ class NoC_Configurator:
         self.configPE.show()
 
     def setValues_PEui(self,ui,X):
-        #TODO: handle random and manulal
+        #TODO: handle random
         ui.PE_label.setText("PE_{0} Parameters".format(X))
         ui.PE_enabled.setChecked(True);
         ui.traffic_pattern.setCurrentIndex(self.PE_traffic_pattern[X].value)
@@ -182,103 +185,146 @@ class NoC_Configurator:
         elif(pattern==Traffic_Patterns.manual):
             return self.PE_dest[X]
 
+
+    def setUpTemplateEnv(self):
+        self.template_dir= "../../templates/"
+        self.output_dir= self.connect_directory + "/"
+        self.jinja2_env=Environment(loader=FileSystemLoader(self.template_dir), lstrip_blocks= True, trim_blocks=True, extensions=['jinja2.ext.do'])
+        self.pb= '//--------BEGIN PATCH--------//\n'
+        self.pe= '\n//--------END_PATCH--------//\n'
+
     def create_Files(self):
+
+        self.setUpTemplateEnv()
 
         #calculate PIR to send_counter_increment
         PE_send_counter_increment = []
         for i in range(0,self.mesh_width*self.mesh_height):
             PE_send_counter_increment.append(math.floor(10.0*self.PE_packet_injection_rate[i]))
 
-        template_dir= "../../templates/"
-        output_dir= self.connect_directory + "/"
-        
         #create individual PE_X.v files
-        file_in_name = template_dir + "PE_X.temp"
-        file_in = open(file_in_name,"r")
-        data_in = file_in.read()
-        file_in.close()
+        template = self.jinja2_env.get_template("creating/PE_X.temp")
 
         for i in range(0,self.mesh_width*self.mesh_height):
-            file_out_name= output_dir + "PE_{0}.v".format(i)
-            template = Template(data_in)
+            file_out_name= self.output_dir + "PE_{0}.v".format(i)
             data_out = template.render(X=i,DEST=self.PE_dest[i],SEND_COUNTER_INCREMENT=PE_send_counter_increment[i])
             file_out = open(file_out_name,"w")
             file_out.write(data_out)
             file_out.close()
         
         #create connection_elements
-        file_in_name = template_dir + "connection_element.temp"
-        file_in = open(file_in_name,"r")
-        data_in = file_in.read()
-        file_in.close()
+        template = self.jinja2_env.get_template("creating/connection_element.temp")
+        connection_elements=template.render(ROUTERNUM=self.mesh_width*self.mesh_height)
 
-        connection_elements=""
-
-        for i in range(0,self.mesh_width*self.mesh_height):
-            template = Template(data_in)
-            data_out = template.render(X=i)
-            connection_elements = connection_elements+ data_out
 
         #create PE instatiations
-        file_in_name = template_dir + "create_PE.temp"
-        file_in = open(file_in_name,"r")
-        data_in = file_in.read()
-        file_in.close()
-
-        createPEs = ""
-
-        for i in range(0,self.mesh_width*self.mesh_height):
-            template = Template(data_in)
-            data_out = template.render(X=i)
-            createPEs = createPEs + data_out 
+        template = self.jinja2_env.get_template("creating/create_PE.temp")
+        createPEs = template.render(ROUTERNUM=self.mesh_width*self.mesh_height)
 
         #create mapping_MkNetwork
-        file_in_name = template_dir + "mapping_MkNetwork.temp"
-        file_in = open(file_in_name,"r")
-        data_in = file_in.read()
-        file_in.close()
- 
-        mappings=""
-
-        for i in range(0,self.mesh_width*self.mesh_height):
-            template = Template(data_in)
-            data_out = template.render(X=i)
-            mappings = mappings + data_out
-            #last should not have a "," at end
-            if(i != self.mesh_width*self.mesh_height -1):
-                mappings = mappings +","
+        template = self.jinja2_env.get_template("creating/mapping_MkNetwork.temp")
+        mappings=template.render(ROUTERNUM=self.mesh_width*self.mesh_height)
 
         #create enables of PEs
-        file_in_name = template_dir + "PE_enable.temp"
-        file_in = open(file_in_name,"r")
-        data_in = file_in.read()
-        file_in.close()
 
-        PE_enableds=""
-        
+        enables=[]
         for i in range(0,self.mesh_width*self.mesh_height):
-            val = 0
             if(self.PE_enabled[i] == True):
-                val = 1
+                enables.append(1)
             else:
-                val = 0
+                enables.append(0)
 
-            template = Template(data_in)
-            data_out = template.render(X=i,VALUE=val)
-            PE_enableds = PE_enableds + data_out
+        template = self.jinja2_env.get_template("creating/PE_enable.temp")
+        PE_enableds=template.render(ROUTERNUM=self.mesh_width*self.mesh_height,ENABLED=enables)
+        
 
         #create testbench
-        file_in_name = template_dir + "testbench.temp"
+        template = self.jinja2_env.get_template("creating/testbench.temp")
+        data_out = template.render(CONNECTIONS = connection_elements, CREATE_PEs = createPEs, MAPPINGS_mkNetwork = mappings, ENABLES = PE_enableds)
+
+        file_out_name= self.output_dir + "testbench.v"
+        file_out = open(file_out_name,"w")
+        file_out.write(data_out)
+        file_out.close()
+
+        #PATCHING OPERATIONS
+        self.patch_MkNetwork()
+        self.patch_FIFO()
+
+    def patch_MkNetwork(self):
+
+        file_MkNetwork = open(self.connect_directory+"/mkNetwork.v","r+")
+        lines_MkNetwork = file_MkNetwork.readlines()
+        lnum_moduleDec = lines_MkNetwork.index('module mkNetwork(CLK,\n')
+        lnum_rest = lines_MkNetwork.index('  input  RST_N;\n')
+
+        template = self.jinja2_env.get_template("patching/mkNetwork_01_decForCnt.temp")
+        data_out = template.render(ROUTERNUM=self.mesh_height*self.mesh_width)
+        ins= self.pb + data_out + self.pe
+        lines_MkNetwork.insert(lnum_moduleDec+2,ins)
+
+        template = self.jinja2_env.get_template("patching/mkNetwork_02_assignetc.temp")
+        data_out = template.render(ROUTERNUM=self.mesh_height*self.mesh_width,VCNUM=self.num_vc,DATALEN=self.flit_data_width)
+        ins= self.pb + data_out + self.pe
+        lines_MkNetwork.insert(lnum_rest+2,ins)
+
+        template = self.jinja2_env.get_template("patching/mkNetwork_03_FIFOMapping.temp")
+
+        #do router 0 first because he is special...
+        for portnum in range(1,5,1):
+            for vcnum in range(0,self.num_vc):
+                if(vcnum==0):
+                    vcsuffix= ""
+                else:
+                    vcsuffix= "_"+str(vcnum)
+                searchstring= '  mkOutPortFIFO net_routers_router_core{0}_outPortFIFOs{1}{2}(.CLK(CLK),\n'.format("","_"+str(portnum),vcsuffix)
+                lnum= lines_MkNetwork.index(searchstring)
+                data_out= template.render(ROUTERNUM=0,VCNUM=vcnum,PORTNUM=portnum)
+                ins= self.pb + data_out + self.pe
+                lines_MkNetwork.insert(lnum+2,ins)
+        #do other routers
+        for routernum in range(1,self.mesh_width*self.mesh_height):
+            for portnum in range(1,5,1):
+                for vcnum in range(0,self.num_vc):
+                    if(vcnum==0):
+                        vcsuffix= ""
+                    else:
+                        vcsuffix= "_"+str(vcnum)
+                    searchstring= '  mkOutPortFIFO net_routers_router_core{0}_outPortFIFOs{1}{2}(.CLK(CLK),\n'.format("_"+str(routernum),"_"+str(portnum),vcsuffix)
+                    lnum= lines_MkNetwork.index(searchstring)
+                    data_out= template.render(ROUTERNUM=routernum,VCNUM=vcnum,PORTNUM=portnum)
+                    ins= self.pb + data_out + self.pe
+                    lines_MkNetwork.insert(lnum+2,ins)
+
+        file_MkNetwork.seek(0)
+        file_MkNetwork.writelines(lines_MkNetwork)
+        file_MkNetwork.truncate()
+        file_MkNetwork.close()
+
+    def patch_FIFO(self):
+
+        file_FIFO = open(self.connect_directory+"/mkOutPortFIFO.v","r+")
+        lines_FIFO = file_FIFO.readlines();
+        lnum_port_dec = lines_FIFO.index('\t\t     RDY_count,\n')
+        lnum_rest = lines_FIFO.index('  input  RST_N;\n')
+        
+        file_in_name = self.template_dir + "patching/mkOutPortFIFO_01_EnqCntDec.temp"
         file_in = open(file_in_name,"r")
         data_in = file_in.read()
         file_in.close()
+        ins_port_dec = self.pb + data_in + self.pe
+        
+        template = self.jinja2_env.get_template("patching/mkOutPortFIFO_02_assignetc.temp")
+        data_out = template.render(DATALEN=self.flit_data_width)
+        ins_assignetc = self.pb + data_out + self.pe
 
-        file_out_name= output_dir + "testbench.v"
-        template = Template(data_in)
-        data_out = template.render(CONNECTIONS = connection_elements, CREATE_PEs = createPEs, MAPPINGS_mkNetwork = mappings, ENABLES = PE_enableds)
-        file_out = open(file_out_name,"w")
-        file_out.write(data_out)
-        file_out.close()      
+        lines_FIFO.insert(lnum_port_dec+1,ins_port_dec)
+        lines_FIFO.insert(lnum_rest+2,ins_assignetc)
+
+        file_FIFO.seek(0)
+        file_FIFO.writelines(lines_FIFO)
+        file_FIFO.truncate()
+        file_FIFO.close()      
 
         
 if __name__ == "__main__":

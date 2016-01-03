@@ -1,0 +1,31 @@
+{% for X in range(0,ROUTERNUM,1) %}
+        
+//#--------------------------#
+//# PE_{{ X }} instantiation 
+//#--------------------------#
+        PE_{{ X }} pe{{ X }}
+        (
+            .en(PE{{ X }}_EN),        
+            .clk(clk),
+            .rst_n(rst_n),
+
+            .flit_in(PE{{ X }}_flitFromNet),
+            .flit_out(PE{{ X }}_flitToNet),
+            .sendFlit(PE{{ X }}_sendFlit),
+            .en_receiveFlit(PE{{ X }}_enRecvFlit),
+
+            .credit_in(PE{{ X }}_creditFromNet),
+            .credit_out(PE{{ X }}_creditToNet),
+            .sendCredit(PE{{ X }}_sendCredit),
+            .en_receiveCredit(PE{{ X }}_enRecvCredit),
+
+            .count_N(router{{ X }}_cnt2),
+            .count_E(router{{ X }}_cnt1),
+            .count_S(router{{ X }}_cnt4),
+            .count_W(router{{ X }}_cnt3),
+
+            .recvPortID(PE{{ X }}_recvPortID)
+        );
+
+{% endfor %}
+

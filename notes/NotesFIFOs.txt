@@ -1,0 +1,71 @@
+i=lines.index('module mkNetwork(CLK,\n')
+lines.insert(i+2,"\t lalala\n")
+
+Insertion Points
+'module mkNetwork(CLK,\n'
+
+'  mkOutPortFIFO net_routers_router_core_1_outPortFIFOs_2_1(.CLK(CLK),\n'
+
+'  input  RST_N;\n'
+
+
+----------------------------------------------------------------------------------------------
+
+Variable in FIFO
+if(outPortFIFO_ifc_fifo_enq_cnt>0) $display("%0d : %0d", Name, outPortFIFO_ifc_fifo_enq_cnt);
+
+
+Insertion points
+'\t\t     RDY_count,\n'
+'  input  RST_N;\n'
+
+
+----------------------------------------------------------------------------------
+
+'  mkOutPortFIFO net_routers_router_core_1_outPortFIFOs_2_1(.CLK(CLK),\n'
+-->
+'  mkOutPortFIFO net_routers_router_core{0}_outPortFIFOs{1}{2}(.CLK(CLK),\n'
+
+{0} = _routernum
+{1} = _portnum
+{2} = _vcnum (begin with 0)
+
+for router 0:
+{0}=""
+{1}=""
+
+----------------------------------------------------------------------------------
+Only portnum 1,2,3,4 interesting!
+N=2
+E=1
+S=4
+W=3
+----------------------------------------------------------------------------------
+
+						       .countEnq(countEnq_{{ ROUTERNUM }}_{{ PORT }}_{{ VC }}),
+						       .RDY_countEnq(),
+
+----------------------------------------------------------------------------------
+
+  wire [{{ DATALENMINUS1 }}:0] countEnq_{{ ROUTERNUM }}_{{ PORT }}_{{ VC }};
+
+----------------------------------------------------------------------------------
+
+  output [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_N;
+  output [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_E;
+  output [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_S;
+  output [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_W;
+
+  wire [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_N;
+  wire [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_E;
+  wire [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_S;
+  wire [{{ DATALENMINUS1 }}:0] router{{ ROUTERNUM }}_flitCnt_W;
+
+-----------------------------------------------------------------------------------
+
+  assign router{{ ROUTERNUM }}_flitCnt_N= {{ VCs_N_flitCnts }};
+  assign router{{ ROUTERNUM }}_flitCnt_E= {{ VCs_E_flitCnts }};
+  assign router{{ ROUTERNUM }}_flitCnt_S= {{ VCs_W_flitCnts }};
+  assign router{{ ROUTERNUM }}_flitCnt_W= {{ VCs_S_flitCnts }};
+
+

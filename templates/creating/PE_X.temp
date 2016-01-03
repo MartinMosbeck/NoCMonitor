@@ -22,7 +22,12 @@ module PE_{{ X }}
 	credit_out,
 	sendCredit,
 	en_receiveCredit,
-	
+
+        count_N,
+        count_E,
+        count_S,
+        count_W,
+
 	recvPortID
 );
 
@@ -135,6 +140,7 @@ begin
 		if (flit_in[flit_port_width-1] == 1) //flit is valid
 		begin
 			$display("PE({{ X }}) @%3d: Flit '%0x' received", cnt_cycle, flit_in[63:0]);
+                        credit_out=1;
 		end			
 
                 //receive a credit

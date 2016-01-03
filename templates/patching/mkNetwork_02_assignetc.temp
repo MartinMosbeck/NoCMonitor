@@ -1,0 +1,42 @@
+//#---------------------------------------------------------------#
+//# declare ports as outputs + wires that will connect to the PEs #
+//#---------------------------------------------------------------#
+{% for routernum in range(0,ROUTERNUM,1) %}
+  output [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_1;
+  output [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_2;
+  output [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_3;
+  output [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_4;
+  wire   [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_1;
+  wire   [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_2;
+  wire   [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_3;
+  wire   [{{ DATALEN-1 }}:0] router{{ routernum }}_flitCnt_4;
+
+{% endfor %}
+
+
+//#------------------------------------------------------#
+//# create the wires that connect to the FIFO count ports#
+//#------------------------------------------------------#
+{% for routernum in range(0,ROUTERNUM,1) %}
+    {% for portnum in range(1,5,1) %}
+        {% for vcnum in range(0,VCNUM,1) %}
+  wire [{{ DATALEN-1 }}:0] countEnq_{{ routernum }}_{{ portnum }}_{{ vcnum }};
+        {% endfor %}
+    {% endfor %}
+
+{% endfor %}
+
+//#--------------------------------------------------#
+//# add up the different VCs to the appropriate port #
+//#--------------------------------------------------#
+{% for routernum in range(0,ROUTERNUM) %}
+    {% for portnum in range(1,5,1) %}
+        {% set sumOverVCs = [] %}
+        {% for vcnum in range(0,VCNUM,1) %}
+            {% do sumOverVCs.append("countEnq_" ~ routernum ~ "_" ~ portnum ~ "_" ~ vcnum) %}
+        {% endfor %}   
+  assign router{{ routernum }}_flitCnt_{{ portnum }}= {{ sumOverVCs|join(' + ' ) }};
+    {%- endfor %}
+
+{% endfor %}
+  

@@ -1,0 +1,10 @@
+//#-------------------------------------------------#
+//# declares the ports that the PEs will connect to #
+//#-------------------------------------------------#
+
+{% for routernum in range(0,ROUTERNUM,1) %}
+    {% for portnum in range(1,5,1) %}
+		 router{{ routernum }}_flitCnt_{{ portnum }},
+    {% endfor %}
+
+{% endfor %}

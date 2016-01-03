@@ -1,5 +1,7 @@
-        
-        //Connection elements for PE_{{ X }}        
+{% for X in range(0,ROUTERNUM,1) %}
+        //#------------------------------------#
+        //# Connection elements for PE_{{ X }} #
+        //#------------------------------------#        
         wire [flit_port_width-1:0] PE{{ X }}_flitToNet;
         wire PE{{ X }}_sendFlit;
 
@@ -15,4 +17,11 @@
         wire [dest_bits-1:0] PE{{ X }}_recvPortID;
 
         reg PE{{ X }}_EN;
+
+        wire [flit_port_width-1:0] router{{ X }}_cnt1;
+        wire [flit_port_width-1:0] router{{ X }}_cnt2;
+        wire [flit_port_width-1:0] router{{ X }}_cnt3;
+        wire [flit_port_width-1:0] router{{ X }}_cnt4;
+
+{% endfor %}
 
