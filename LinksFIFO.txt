@@ -1,0 +1,2 @@
+http://www.asic-world.com/examples/verilog/syn_fifo.html
+http://electrosofts.com/verilog/fifo.html

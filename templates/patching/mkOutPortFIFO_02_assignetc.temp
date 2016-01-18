@@ -1,4 +1,4 @@
-  output [63:0] countEnq;
+  output [{{ DATALEN-1 }}:0] countEnq;
   output  RDY_countEnq;
   wire [{{ DATALEN-1 }}:0] countEnq;
   wire RDY_countEnq;

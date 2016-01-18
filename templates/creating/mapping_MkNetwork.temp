@@ -14,5 +14,12 @@
                 .router{{ X }}_flitCnt_1(router{{ X }}_cnt1),
                 .router{{ X }}_flitCnt_2(router{{ X }}_cnt2),
                 .router{{ X }}_flitCnt_3(router{{ X }}_cnt3),
-                .router{{ X }}_flitCnt_4(router{{ X }}_cnt4){% if X != ROUTERNUM-1 %},{% endif %} 
+                .router{{ X }}_flitCnt_4(router{{ X }}_cnt4),
 {% endfor %}
+
+                .recv_ports_{{ ROUTERNUM }}_getFlit(STAT_flitFromNet), 
+                .EN_recv_ports_{{ ROUTERNUM }}_getFlit(STAT_enRecvFlit),
+                .recv_ports_{{ ROUTERNUM }}_putCredits_cr_in(STAT_creditToNet),
+                .EN_recv_ports_{{ ROUTERNUM }}_putCredits(STAT_sendCredit),
+                .recv_ports_info_{{ ROUTERNUM }}_getRecvPortID(STAT_recvPortID)
+               

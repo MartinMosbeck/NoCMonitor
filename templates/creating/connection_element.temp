@@ -25,3 +25,16 @@
 
 {% endfor %}
 
+        //#------------------------------------#
+        //# Connection elements STAT           #
+        //#------------------------------------#        
+
+        wire [flit_port_width-1:0] STAT_flitFromNet;
+        wire STAT_enRecvFlit;
+
+        wire [credit_port_width-1:0] STAT_creditToNet;
+        wire STAT_sendCredit;
+
+        wire [dest_bits-1:0] STAT_recvPortID;
+
+        reg STAT_EN;

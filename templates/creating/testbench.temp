@@ -5,14 +5,18 @@ module testbench();
 	parameter HalfClkPeriod = 5;
 	parameter ClkPeriod = 2*HalfClkPeriod;
 
-	reg clk;
-	reg rst_n;
-
         parameter vc_bits = (`NUM_VCS > 1) ? $clog2(`NUM_VCS) : 1;
 	parameter dest_bits = $clog2(`NUM_USER_RECV_PORTS);
 	parameter flit_port_width = 2 /*valid and tail bits*/+ `FLIT_DATA_WIDTH + dest_bits + vc_bits;
 	parameter credit_port_width = 1 + vc_bits; // 1 valid bit
 	parameter credit_cnt_width = $clog2(`FLIT_BUFFER_DEPTH + 1);
+        parameter windowBits = `FLIT_DATA_WIDTH - 4 - dest_bits; //minus because: |<header(4)>|<src>|<count> 
+
+	reg clk;
+	reg rst_n;
+        reg [windowBits-1 : 0] cycleCntForWindow;
+
+        
 
 {{ CONNECTIONS }}
 
@@ -28,6 +32,9 @@ module testbench();
                 #(5*ClkPeriod+HalfClkPeriod); 
                 rst_n = 1; 
                 #(HalfClkPeriod);
+                
+                cycleCntForWindow = 0;
+                
 
                 //ENABLES
 {{ ENABLES }}
@@ -44,7 +51,11 @@ module testbench();
 {{ MAPPINGS_mkNetwork }}
 	);
 
-
+	always@(posedge clk)
+	begin
+		//$display("--GLOBAL CYCLE @%3d-----------------------------",cycleCntForWindow);
+		cycleCntForWindow = cycleCntForWindow + 1;	
+	end
 endmodule
 
 

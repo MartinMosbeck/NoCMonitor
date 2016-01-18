@@ -1,3 +1,5 @@
 {% for X in range(0,ROUTERNUM,1) %}
                 PE{{ X }}_EN={{ ENABLED[X] }};
 {% endfor %}
+
+STAT_EN=1;

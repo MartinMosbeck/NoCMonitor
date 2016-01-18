@@ -24,6 +24,8 @@
             .count_S(router{{ X }}_cnt4),
             .count_W(router{{ X }}_cnt3),
 
+            .windowCnt(cycleCntForWindow),
+
             .recvPortID(PE{{ X }}_recvPortID)
         );
 
